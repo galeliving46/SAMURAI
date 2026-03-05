@@ -1,0 +1,17 @@
+{
+  "enabled": true,
+  "name": "SAP: Refresh after MCP write",
+  "description": "After any SAP MCP write/activate tool call, reminds the agent to notify the user that open sap:// files may need refreshing, or triggers a refresh command.",
+  "version": "1",
+  "when": {
+    "type": "postToolUse",
+    "toolTypes": [
+      ".*write.*",
+      ".*activate.*"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "An SAP MCP write or activate operation just completed. If the user has sap:// files open in the extension, tell them to switch tabs or run \"SAP ADT: Refresh Open Files from Server\" (Cmd+Shift+P) to see the updated code. Keep it brief."
+  }
+}

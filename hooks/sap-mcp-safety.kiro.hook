@@ -1,0 +1,19 @@
+{
+  "enabled": true,
+  "name": "SAP: Confirm before write operations",
+  "description": "Before any SAP MCP write/activate/release tool call, asks the agent to verify the operation is safe and intentional.",
+  "version": "2",
+  "when": {
+    "type": "preToolUse",
+    "toolTypes": [
+      ".*write.*",
+      ".*activate.*",
+      ".*release.*",
+      ".*create.*"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "You are about to perform a WRITE operation on the SAP system. Before proceeding, verify: 1) The object name and content are correct, 2) You have confirmed with the user that this change is intentional, 3) The target system is DEV (not QAS/PRD), 4) For write tools, you SHOULD pass expectedSource (the server source you originally read) to enable conflict detection — this prevents overwriting changes made by other developers. If any doubt, ask the user to confirm before proceeding."
+  }
+}

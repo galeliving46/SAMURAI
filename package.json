@@ -1,0 +1,24 @@
+{
+  "name": "sap-adt-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for SAP ABAP Development Tools (ADT) integration with Kiro",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "sap-adt-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx src/index.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.18.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}
