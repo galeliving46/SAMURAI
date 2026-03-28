@@ -456,18 +456,22 @@ This prevents accidentally overwriting changes made by other developers. If you 
 
 ---
 
-## Kiro Hooks
+## MCP Safety & Automation
 
-Pre-built hooks are included in the `hooks/` directory for Kiro users. These automate safety checks and workflow reminders.
+Because the SAP system is a live enterprise environment, safety checks and workflow reminders are critical. We provide two ways to enforce this, depending on your AI client.
 
-### Installation
+### 1. Kiro (Event-Driven Hooks)
+
+Pre-built hooks are included in the `hooks/` directory for Kiro users. These natively hook into the tool execution lifecycle to pause and mandate the agent to verify safety.
+
+**Installation:**
 
 ```bash
 # Copy hooks to your workspace
 cp sap-adt-mcp-server/hooks/*.kiro.hook .kiro/hooks/
 ```
 
-### `sap-mcp-safety.kiro.hook` — Write Operation Guard
+**`sap-mcp-safety.kiro.hook` — Write Operation Guard**
 
 Fires **before** any write/activate/release/create tool call. Asks the agent to verify:
 1. Object name and content are correct
@@ -475,11 +479,11 @@ Fires **before** any write/activate/release/create tool call. Asks the agent to 
 3. Target system is DEV (not QAS/PRD)
 4. `expectedSource` is passed for conflict detection
 
-### `sap-mcp-refresh.kiro.hook` — Auto-Refresh Reminder
+**`sap-mcp-refresh.kiro.hook` — Auto-Refresh Reminder**
 
 Fires **after** any write/activate tool call. Reminds the agent to tell the user to refresh open files in the SAP ADT VS Code extension.
 
-### Custom Hook Ideas
+**Custom Hook Ideas:**
 
 | Hook | Trigger | Action |
 |------|---------|--------|
@@ -487,6 +491,12 @@ Fires **after** any write/activate tool call. Reminds the agent to tell the user
 | Transport check before write | `preToolUse` + `.*write.*` | `askAgent`: verify transport assignment |
 | Syntax check on ABAP save | `fileEdited` + `*.abap` | `runCommand`: trigger syntax check |
 | ATC check before release | `preToolUse` + `.*release.*` | `askAgent`: run ATC first |
+
+### 2. Antigravity, Cursor, Windsurf, & Cline (Persistent Rules)
+
+Other clients either don't support event-driven JSON hooks or use complex scripted implementations. For these IDEs, we've baked the **exact same safety logic natively into the AI's core instructions** via the ABAP Steering & Skills file (see the next section).
+
+By installing the specific skill or rule file for your client, your AI assistant is strictly mandated to verify every write operation and remind you to refresh open files, bypassing the need for separate hook files entirely.
 
 ---
 

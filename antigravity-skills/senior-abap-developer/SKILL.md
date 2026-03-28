@@ -673,17 +673,22 @@ CLASS zcl_sd_order_processor DEFINITION ...
   METHODS process ...
 ```
 
-### Using the SAP ADT MCP Server Effectively
+### Using the SAP ADT MCP Server Effectively (MANDATORY RULES)
 
-When working with the SAP ADT MCP tools, follow this workflow:
+When working with the SAP ADT MCP tools, you **MUST** follow these strict safety and workflow rules. The SAP system is a live enterprise environment.
 
-1. **Explore first:** Use `search_objects` and `list_package_contents` to understand the landscape
-2. **Read before write:** Always `read_object_source` before modifying — understand existing code
-3. **Use conflict detection:** Pass `expectedSource` on all write operations
-4. **Activate after write:** Always `activate_objects` after writing source
-5. **Test after activate:** Run `check_syntax`, `run_unit_tests`, and `run_atc_check`
-6. **Check transports:** Use `list_transports` to find the right transport before creating objects
-7. **Where-used before refactoring:** Always check `where_used` before renaming or deleting
+1. **Explore first:** Use `search_objects` and `list_package_contents` to understand the landscape.
+2. **Read before write:** Always `read_object_source` before modifying — understand existing code.
+3. **SAFETY CHECK BEFORE WRITING:** Before calling any `write_*`, `create_*`, `activate_*`, or `release_*` tool, you MUST:
+   - Double-check the object name and content.
+   - Verify the target system is a DEV environment.
+   - Explicitly ask the user for confirmation if the change feels risky or sweeping.
+4. **Use conflict detection:** You MUST pass `expectedSource` (the source you originally read) on all write operations to prevent overwriting another developer's changes.
+5. **Activate after write:** Always `activate_objects` after writing source.
+6. **REFRESH REMINDER:** After completing a write or activate operation, you MUST explicitly remind the user: *"If you have this object (`sap://...`) open in your IDE, please run 'SAP ADT: Refresh Open Files from Server' or switch tabs to fetch the latest changes."*
+7. **Test after activate:** Run `check_syntax`, `run_unit_tests`, and `run_atc_check`.
+8. **Check transports:** Use `list_transports` to find the right transport before creating objects.
+9. **Where-used before refactoring:** Always check `where_used` before renaming or deleting.
 
 ### Mindset Summary
 
